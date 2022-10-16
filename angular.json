@@ -24,7 +24,17 @@
             ],
             "styles": [
               "./node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "src/styles.css"
+              "src/styles/styles.css",
+              {
+                "input": "src/styles/style-a.css",
+                "bundleName": "style-a",
+                "inject": false
+              },
+              {
+                "input": "src/styles/style-b.css",
+                "bundleName": "style-b",
+                "inject": false
+              }
             ],
             "scripts": []
           },
@@ -91,7 +101,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles/styles.css"
             ],
             "scripts": []
           }
