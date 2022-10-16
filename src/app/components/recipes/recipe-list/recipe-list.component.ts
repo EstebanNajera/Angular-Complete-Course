@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, Output, EventEmitter } from "@angular/core";
 import { Recipe } from "src/app/models/recipe.model";
 
 @Component({
@@ -7,6 +7,7 @@ import { Recipe } from "src/app/models/recipe.model";
   styleUrls: ['./recipe-list.component.css']
 })
 export class RecipeListComponent {
+  @Output() selectedRecipe: EventEmitter<Recipe> =  new EventEmitter<Recipe>();
   recipes: Recipe[] = [
     new Recipe(
       'Pasta',
@@ -14,9 +15,15 @@ export class RecipeListComponent {
       'https://www.cucinabyelena.com/wp-content/uploads/2022/01/0Z4A3605-3-scaled.jpg'
     ),
     new Recipe(
-      'Pasta',
+      'Pasta 2',
       'Italian pasta',
       'https://www.cucinabyelena.com/wp-content/uploads/2022/01/0Z4A3605-3-scaled.jpg'
     ),
   ];
+
+  constructor() {}
+
+  onLoadData(recipe: Recipe) {
+    this.selectedRecipe.emit(recipe);
+  }
 }
