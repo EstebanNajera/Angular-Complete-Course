@@ -7,15 +7,9 @@ import { LoadStyleService } from './service/load-style.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  loadedFeature = 'recipe';
-
   constructor(
     private loadStyleService: LoadStyleService
   ) {
     this.loadStyleService.loadStyle('style.css');
-  }
-
-  onNavigate(feature: string) {
-    this.loadedFeature = feature;
   }
 }
