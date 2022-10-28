@@ -10,11 +10,10 @@ const initialState = {
 
 export function shoppingListReducer(state = initialState, action: Action) {
   switch (action.type) {
-    case value:
-
-      break;
-
-    default:
-      break;
+    case 'ADD_INGREDIENT':
+      return {
+        ...state,
+        ingredients: [...state.ingredients, action]
+      };
   }
 }
