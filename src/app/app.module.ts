@@ -5,10 +5,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
 import { RecipesModule } from './modules/recipes/recipes.module';
-import { ShoppingListModule } from './modules/shopping-list/shopping-list.module';
 import { SharedModule } from './modules/shared/shared.module';
 import { CoreModule } from './modules/core.module';
-import { AuthModule } from './modules/auth/auth.module';
+import { StoreModule } from '@ngrx/store';
+import { shoppingListReducer } from './ngrx/reducers/shopping-list.reducer';
 
 @NgModule({
   declarations: [
@@ -21,7 +21,8 @@ import { AuthModule } from './modules/auth/auth.module';
     HttpClientModule,
     RecipesModule,
     SharedModule,
-    CoreModule
+    CoreModule,
+    StoreModule.forRoot({shoppingList: shoppingListReducer})
   ],
   bootstrap: [AppComponent]
   // entryComponents: [AlertComponent] no se requiere por la version
