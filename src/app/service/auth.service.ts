@@ -35,7 +35,7 @@ export class AuthService {
       returnSecureToken: true
     }
     return this.http.post<AuthResponseData>
-      (`${this.url}:signUp?key=${environment}`, body)
+      (`${this.url}:signUp?key=${environment.firebaseAPIKey}`, body)
       .pipe(catchError(this.handleError),
       tap((resData) => {
         this.handleAuthResponseData(resData.email, resData.localId, resData.idToken, +resData.expiresIn);
@@ -49,7 +49,7 @@ export class AuthService {
       returnSecureToken: true
     }
     return this.http.post<AuthResponseData>
-      (`${this.url}:signInWithPassword?key=${environment}`, body)
+      (`${this.url}:signInWithPassword?key=${environment.firebaseAPIKey}`, body)
       .pipe(catchError(this.handleError),
       tap((resData) => {
         this.handleAuthResponseData(resData.email, resData.localId, resData.idToken, +resData.expiresIn);
