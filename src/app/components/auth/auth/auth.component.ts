@@ -1,23 +1,34 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { AuthResponseData, AuthService } from 'src/app/service/auth.service';
+import { PlaceholderDirective } from 'src/app/Utils/directives/placeholder.directive';
+import { AlertComponent } from '../../shared/alert/alert.component';
 
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.css']
 })
-export class AuthComponent implements OnInit {
+export class AuthComponent implements OnInit, OnDestroy {
+  @ViewChild(PlaceholderDirective) alertHost: PlaceholderDirective;
+  private alerHostSub: Subscription;
   isLoginMode = true;
   isLoading = false;
   error: string;
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private componentFactoryResolver: ComponentFactoryResolver
   ) { }
+
+  ngOnDestroy(): void {
+    if (this.alerHostSub) {
+      this.alerHostSub.unsubscribe();
+    }
+  }
 
   ngOnInit(): void {
   }
@@ -46,8 +57,25 @@ export class AuthComponent implements OnInit {
       }, error => {
         this.isLoading = false;
         this.error = error;
+        this.showErrorAlert(error);
       }
     );
     authForm.reset();
+  }
+
+  onHandleError() {
+    this.error = null;
+  }
+
+  private showErrorAlert(message: string) {
+    const alertCmpFactory = this.componentFactoryResolver.resolveComponentFactory(AlertComponent);
+    const hostViewContainerRef = this.alertHost.viewContainerRef;
+    hostViewContainerRef.clear();
+    const viewContainerRef = hostViewContainerRef.createComponent(alertCmpFactory);
+    viewContainerRef.instance.message = message;
+    this.alerHostSub = viewContainerRef.instance.close.subscribe(() => {
+      this.alerHostSub.unsubscribe();
+      hostViewContainerRef.clear();
+    });
   }
 }
