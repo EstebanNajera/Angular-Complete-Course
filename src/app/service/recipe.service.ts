@@ -3,11 +3,12 @@ import { Subject } from "rxjs";
 import { Ingredient } from "../models/ingredient.model";
 import { Recipe } from "../models/recipe.model";
 import { ShoppingListService } from "./shopping-list.service";
-
+import { Store } from '@ngrx/store';
+import * as ShoppingListActions  from "src/app/ngrx/actions/shopping-list.actions";
 @Injectable()
 export class RecipeService {
   recipesChanged = new Subject<Recipe[]>();
-  /*private recipes: Recipe[] = [
+  private recipes: Recipe[] = [
     new Recipe(
       'Pasta',
       'Italian pasta',
@@ -26,11 +27,12 @@ export class RecipeService {
         new Ingredient('Meat', 1)
       ]
     ),
-  ];*/
-  private recipes: Recipe[] = [];
+  ];
+  // private recipes: Recipe[] = [];
 
   constructor(
-    private shoppingListService: ShoppingListService
+    private shoppingListService: ShoppingListService,
+    private store: Store<{ shoppingList: { ingredients: Ingredient[] } }>
   ) {}
 
   public getRecipes() {
@@ -42,7 +44,8 @@ export class RecipeService {
   }
 
   public addIngredientToShoppingList(ingredients: Ingredient[]) {
-    this.shoppingListService.addIngredients(ingredients);
+    // this.shoppingListService.addIngredients(ingredients);
+    this.store.dispatch(new ShoppingListActions.AddIngredients(ingredients));
   }
 
   public addRecipe(recipe: Recipe) {
