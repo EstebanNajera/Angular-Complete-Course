@@ -5,6 +5,8 @@ import { Ingredient } from 'src/app/models/ingredient.model';
 import { ShoppingListService } from 'src/app/service/shopping-list.service';
 import { Store } from '@ngrx/store';
 import * as ShoppingListActions  from "src/app/ngrx/actions/shopping-list.actions";
+import * as shoppingListReducer from "src/app/ngrx/reducers/shopping-list.reducer";
+
 @Component({
   selector: 'app-shopping-edit',
   templateUrl: './shopping-edit.component.html',
@@ -18,7 +20,7 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
   editedItem: Ingredient;
   constructor(
     private shoppingListService: ShoppingListService,
-    private store: Store<{ shoppingList: { ingredients: Ingredient[] } }>
+    private store: Store<shoppingListReducer.AppState>
     ) { }
 
   ngOnInit(): void {
