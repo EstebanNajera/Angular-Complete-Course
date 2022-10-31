@@ -4,6 +4,7 @@ import { Ingredient } from "src/app/models/ingredient.model";
 import { ShoppingListService } from "src/app/service/shopping-list.service";
 import { Store } from '@ngrx/store';
 import * as shoppingListReducer from "src/app/ngrx/reducers/shopping-list.reducer";
+import * as ShoppingListActions  from "src/app/ngrx/actions/shopping-list.actions";
 
 @Component({
   selector: 'app-shopping-list',
@@ -23,6 +24,7 @@ export class ShoppingListComponent implements OnInit {
   }
 
   onEditItem(index: number) {
-    this.shoppingListService.startedEditing.next(index);
+    // this.shoppingListService.startedEditing.next(index);
+    this.store.dispatch(new ShoppingListActions.StartEdit(index));
   }
 }
