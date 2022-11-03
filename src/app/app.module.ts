@@ -8,7 +8,7 @@ import { RecipesModule } from './modules/recipes/recipes.module';
 import { SharedModule } from './modules/shared/shared.module';
 import { CoreModule } from './modules/core.module';
 import { StoreModule } from '@ngrx/store';
-import { shoppingListReducer } from './ngrx/reducers/shopping-list.reducer';
+import * as fromApp from './ngrx/store/app.reducer';
 
 @NgModule({
   declarations: [
@@ -22,7 +22,7 @@ import { shoppingListReducer } from './ngrx/reducers/shopping-list.reducer';
     RecipesModule,
     SharedModule,
     CoreModule,
-    StoreModule.forRoot({shoppingList: shoppingListReducer})
+    StoreModule.forRoot(fromApp.appReducer)
   ],
   bootstrap: [AppComponent]
   // entryComponents: [AlertComponent] no se requiere por la version
