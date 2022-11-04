@@ -11,7 +11,8 @@ import { StoreModule } from '@ngrx/store';
 import * as fromApp from './ngrx/store/app.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { AuthEffects } from './ngrx/effects/auth.effects';
-
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from 'src/environments/environment';
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,7 +26,8 @@ import { AuthEffects } from './ngrx/effects/auth.effects';
     SharedModule,
     CoreModule,
     StoreModule.forRoot(fromApp.appReducer),
-    EffectsModule.forRoot([AuthEffects])
+    EffectsModule.forRoot([AuthEffects]),
+    StoreDevtoolsModule.instrument({logOnly: environment.production})
   ],
   bootstrap: [AppComponent]
   // entryComponents: [AlertComponent] no se requiere por la version
