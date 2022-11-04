@@ -34,6 +34,10 @@ export class AuthComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.store.select('auth').subscribe((authState) => {
+      this.isLoading = authState.loading;
+      this.error = authState.authError;
+    });
   }
 
   public onSwitchMode() {
@@ -54,7 +58,9 @@ export class AuthComponent implements OnInit, OnDestroy {
     } else {
       authObs = this.authService.signup(email, password)
     }
-    authObs.subscribe(
+
+
+    /*authObs.subscribe(
       (resData) => {
         this.isLoading = false;
         this.router.navigate(['/recipes']);
@@ -63,7 +69,7 @@ export class AuthComponent implements OnInit, OnDestroy {
         this.error = error;
         this.showErrorAlert(error);
       }
-    );
+    );*/
     authForm.reset();
   }
 
