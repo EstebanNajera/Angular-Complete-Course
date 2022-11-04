@@ -9,6 +9,8 @@ import { SharedModule } from './modules/shared/shared.module';
 import { CoreModule } from './modules/core.module';
 import { StoreModule } from '@ngrx/store';
 import * as fromApp from './ngrx/store/app.reducer';
+import { EffectsModule } from '@ngrx/effects';
+import { AuthEffects } from './ngrx/effects/auth.effects';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,8 @@ import * as fromApp from './ngrx/store/app.reducer';
     RecipesModule,
     SharedModule,
     CoreModule,
-    StoreModule.forRoot(fromApp.appReducer)
+    StoreModule.forRoot(fromApp.appReducer),
+    EffectsModule.forRoot([AuthEffects])
   ],
   bootstrap: [AppComponent]
   // entryComponents: [AlertComponent] no se requiere por la version

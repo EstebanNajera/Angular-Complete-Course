@@ -3,6 +3,7 @@ import { Actions, ofType, Effect } from "@ngrx/effects";
 import { catchError, map, of, switchMap } from "rxjs";
 import { environment } from "src/environments/environment";
 import * as AuthActions from '../actions/auth.actions';
+import { Injectable } from '@angular/core';
 
 export interface AuthResponseData {
   kind: string;
@@ -14,6 +15,7 @@ export interface AuthResponseData {
   registered?: boolean;
 }
 
+@Injectable()
 export class AuthEffects {
   url = 'https://identitytoolkit.googleapis.com/v1/accounts';
   @Effect() authLogin = this.actions$.pipe(
@@ -25,12 +27,19 @@ export class AuthEffects {
         returnSecureToken: true
       };
       return this.http.post<AuthResponseData>
-        (`${this.url}:signInWithPassword?key=${environment.firebaseAPIKey}`, body)
-        .pipe(catchError((error) => {
-          of();
-        }), map(resData => {
-          of();
-        }));
+        (`${this.url}:signInWithPassword?key=${environment.firebaseAPIKey}`, body).pipe(
+          map(resData => {
+            const expirationDate = new Date(new Date().getTime() + +resData.expiresIn * 1000);
+            return of(new AuthActions.Login({
+              email: resData.email,
+              userId: resData.email,
+              token: resData.email,
+              expirationDate: expirationDate
+            }));
+          }), catchError((error) => {
+            return of();
+          })
+        );
     }),
 
   );
@@ -39,4 +48,5 @@ export class AuthEffects {
     private http: HttpClient,
     private actions$: Actions
   ) {}
+
 }
