@@ -5,6 +5,7 @@ import { environment } from "src/environments/environment";
 import * as AuthActions from '../actions/auth.actions';
 import { Injectable } from '@angular/core';
 import { Router } from "@angular/router";
+import { User } from "src/app/models/user.model";
 
 export interface AuthResponseData {
   kind: string;
@@ -22,9 +23,11 @@ export class AuthEffects {
 
   handleAuthentication = (email: string, userId: number, token: string, expiresIn: number) => {
     const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
+    const newUser = new User(email, userId.toString(), token, expirationDate);
+    localStorage.setItem('userData', JSON.stringify(newUser));
     return new AuthActions.AuthenticateSuccess({
       email: email,
-      userId: email,
+      userId: userId,
       token: email,
       expirationDate: expirationDate
     });
@@ -90,6 +93,37 @@ export class AuthEffects {
     ofType(AuthActions.AUTHENTICATE_SUCCESS, AuthActions.LOGOUT),
     tap(() => {
       this.router.navigate(['/recipes']);
+    })
+  );
+
+  @Effect() autoLogin = this.actions$.pipe(
+    ofType(AuthActions.AUTO_LOGIN),
+    map(() => {
+      const userData = JSON.parse(localStorage.getItem('user'));
+      if (!userData) {
+        return { type: 'DUMMY' };
+      }
+      const expDate = new Date(userData._tokenExpirationDate);
+      const loadedUser = new User(userData.email, userData.id, userData._token, expDate);
+
+      if (loadedUser.token) {
+        return new AuthActions.AuthenticateSuccess({
+          email: loadedUser.email,
+          userId: +loadedUser.id,
+          token: loadedUser.token,
+          expirationDate: expDate
+        });
+        const expDuration = new Date(userData._tokenExpirationDate).getTime() - new Date().getTime();
+        // this.autoLogout(expDuration);
+      }
+      return { type: 'DUMMY' };
+    })
+  );
+
+  @Effect() authLogout = this.actions$.pipe(
+    ofType(AuthActions.LOGOUT),
+    tap(() => {
+      localStorage.removeItem('userData');
     })
   );
 
