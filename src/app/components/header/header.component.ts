@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { map, Subscription } from "rxjs";
 import { User } from "src/app/models/user.model";
-import { AuthService } from "src/app/service/auth.service";
 import { DataStorageService } from "src/app/service/data-storage.service";
 import * as fromApp from '../../ngrx/store/app.reducer';
 import * as AuthActions from '../../ngrx/actions/auth.actions';
@@ -17,7 +16,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   userSub: Subscription;
   constructor(
     private dataStorageService: DataStorageService,
-    private authService: AuthService,
     private store: Store<fromApp.AppState>
   ) {}
 
