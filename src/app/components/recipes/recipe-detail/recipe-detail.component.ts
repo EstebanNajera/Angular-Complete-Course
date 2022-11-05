@@ -5,6 +5,7 @@ import { map, Subscription, switchMap } from "rxjs";
 import { Recipe } from "src/app/models/recipe.model";
 import { RecipeService } from "src/app/service/recipe.service";
 import * as fromApp from '../../../ngrx/store/app.reducer';
+import * as RecipesActions from '../../../ngrx/actions/recipe.actions';
 
 @Component({
   selector: 'app-recipe-detail',
@@ -52,7 +53,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   }
 
   onDeleteRecipe() {
-    this.recipeService.deleteRecipe(this.id);
+    this.store.dispatch(new RecipesActions.DeleteRecipe(this.id));
     this.router.navigate(['/recipes']);
   }
 
