@@ -4,11 +4,16 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
-import { RecipesModule } from './modules/recipes/recipes.module';
-import { ShoppingListModule } from './modules/shopping-list/shopping-list.module';
 import { SharedModule } from './modules/shared/shared.module';
 import { CoreModule } from './modules/core.module';
-import { AuthModule } from './modules/auth/auth.module';
+import { StoreModule } from '@ngrx/store';
+import * as fromApp from './ngrx/store/app.reducer';
+import { EffectsModule } from '@ngrx/effects';
+import { AuthEffects } from './ngrx/effects/auth.effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from 'src/environments/environment';
+import { StoreRouterConnectingModule } from '@ngrx/router-store';
+import { RecipesEffects } from './ngrx/effects/recipe.effects';
 
 @NgModule({
   declarations: [
@@ -19,9 +24,12 @@ import { AuthModule } from './modules/auth/auth.module';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    RecipesModule,
     SharedModule,
-    CoreModule
+    CoreModule,
+    StoreModule.forRoot(fromApp.appReducer),
+    EffectsModule.forRoot([AuthEffects, RecipesEffects]),
+    StoreDevtoolsModule.instrument({logOnly: environment.production}),
+    StoreRouterConnectingModule.forRoot()
   ],
   bootstrap: [AppComponent]
   // entryComponents: [AlertComponent] no se requiere por la version
