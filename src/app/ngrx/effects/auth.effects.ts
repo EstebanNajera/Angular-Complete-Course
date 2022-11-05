@@ -30,7 +30,8 @@ export class AuthEffects {
       email: email,
       userId: userId,
       token: email,
-      expirationDate: expirationDate
+      expirationDate: expirationDate,
+      redirect: true
     });
   }
 
@@ -120,7 +121,8 @@ export class AuthEffects {
           email: loadedUser.email,
           userId: +loadedUser.id,
           token: loadedUser.token,
-          expirationDate: expDate
+          expirationDate: expDate,
+          redirect: false
         });
       }
       return { type: 'DUMMY' };
@@ -129,10 +131,12 @@ export class AuthEffects {
 
   @Effect() authLogout = this.actions$.pipe(
     ofType(AuthActions.LOGOUT),
-    tap(() => {
-      this.router.navigate(['/']);
-      this.authService.clearLogoutTimer();
-      localStorage.removeItem('userData');
+    tap((authSuccessAction: AuthActions.AuthenticateSuccess) => {
+      if (authSuccessAction.payload.redirect) {
+        this.router.navigate(['/']);
+        this.authService.clearLogoutTimer();
+        localStorage.removeItem('userData');
+      }
     })
   );
 
